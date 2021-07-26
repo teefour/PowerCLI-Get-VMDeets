@@ -1,0 +1,20 @@
+$Datacenter = Get-Datacenter -Name test
+$Cluster = Get-Cluster -Name "Bean Cluster"
+      
+    Get-VM -Location $Cluster |
+             
+            Select @{N='DNS Name';E={$_.Guest.HostName}},
+            @{N='Cluster';E={$cluster.Name}},
+            @{N='IP';E={$_.Guest.IPAddress[0]}},
+            @{N='IP1';E={$_.Guest.IPAddress[1]}},
+            @{N='IP2';E={$_.Guest.IPAddress[2]}},
+            @{N='IP3';E={$_.Guest.IPAddress[3]}},
+            @{N='IP4';E={$_.Guest.IPAddress[4]}},
+            @{N='IP5';E={$_.Guest.IPAddress[5]}},
+            @{N='IP6';E={$_.Guest.IPAddress[6]}},
+            @{N='IP7';E={$_.Guest.IPAddress[7]}},
+            @{N='IP8';E={$_.Guest.IPAddress[8]}},
+            @{N="Configured OS";E={$_.ExtensionData.Config.GuestFullname}},
+            Name,Guest.HostName,PowerState,NumCPU,MemoryGB,Guest,Folder,OperatingSystem,
+            @{N='VmHost';E={$esx.Name}},
+            @{N="Datastore";E={[string]::Join(',',(Get-Datastore -Id $_.DatastoreIdList | Select -ExpandProperty Name))}} | Export-Csv C:\report-vmware.csv -NoTypeInformation -UseCulture
